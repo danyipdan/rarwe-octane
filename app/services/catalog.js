@@ -8,7 +8,7 @@ export default class CatalogService extends Service {
   constructor() {
     super(...arguments);
     this.storage.bands = tracked([]);
-    this.storage.sons = tracked([]);
+    this.storage.songs = tracked([]);
   }
 
   add(type, record) {

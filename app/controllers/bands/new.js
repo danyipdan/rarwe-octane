@@ -2,8 +2,8 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { dasherize } from '@ember/string';
-import { Band } from 'rarwe-octane/routes/bands';
 import { service } from '@ember/service';
+import { Band } from '../../models/band';
 
 export default class BandsNewController extends Controller {
   @service catalog;
