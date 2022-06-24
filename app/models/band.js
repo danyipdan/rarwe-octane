@@ -1,6 +1,6 @@
 import { tracked } from '@glimmer/tracking';
 
-export class Band {
+export default class Band {
   @tracked name;
   @tracked songs;
 
