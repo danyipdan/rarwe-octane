@@ -1,7 +1,7 @@
 import { tracked } from '@glimmer/tracking';
 
 export default class Band {
-  @tracked name;
+  @tracked name; // tracked properties will cause a re-render when they are changed
   @tracked songs;
 
   constructor({ id, name, songs }, relationships = {}) {

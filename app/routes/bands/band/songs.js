@@ -10,6 +10,7 @@ export default class BandsBandSongsRoute extends Route {
     return band;
   }
 
+  // this is called when a route transition is initated
   resetController(controller) {
     controller.title = '';
     controller.showAddSong = true;
