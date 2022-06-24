@@ -77,7 +77,8 @@ export default class CatalogService extends Service {
     let url = record.relationships[relationship];
     const response = await fetch(url);
     const json = await response.json();
-    if (isArray(json.data)) { // checks id the data is an array or not to decide which load method to use
+    if (isArray(json.data)) {
+      // checks id the data is an array or not to decide which load method to use
       record[relationship] = this.loadAll(json);
     } else {
       record[relationship] = this.load(json);
