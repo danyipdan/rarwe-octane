@@ -1,8 +1,12 @@
 import { module, test } from 'qunit';
-import { visit, click, fillIn, waitFor } from '@ember/test-helpers';
+import { click, visit, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'rarwe-octane/tests/helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { getPageTitle } from 'ember-page-title/test-support';
+import {
+  createBand,
+  createSong,
+} from 'rarwe-octane/tests/helpers/custom-helpers';
 
 module('Acceptance | bands', function (hooks) {
   setupApplicationTest(hooks);
@@ -39,9 +43,7 @@ module('Acceptance | bands', function (hooks) {
   test('Create a band', async function (assert) {
     this.server.create('band', { name: 'Royal Blood' });
     await visit('/');
-    await click('[data-test-rr="new-band-button"]');
-    await fillIn('[data-test-rr="new-band-name"]', 'Caspian');
-    await click('[data-test-rr="save-band-button"]');
+    await createBand('Caspian');
     await waitFor('[data-test-rr="no-songs-text"]');
 
     assert
@@ -54,5 +56,59 @@ module('Acceptance | bands', function (hooks) {
     assert
       .dom('[data-test-rr="songs-nav-item"] > .active')
       .exists('The Songs tab is active');
+  });
+
+  test('Create a song', async function (assert) {
+    this.server.create('band', { name: 'Metallica' });
+    await visit('/');
+    await createBand('The Wiggles');
+    await waitFor('[data-test-rr="no-songs-text"]');
+
+    await createSong('Hot Potato');
+    await waitFor('[data-test-rr="song-list-item"]');
+    assert
+      .dom('[data-test-rr="song-list-item"]')
+      .exists({ count: 1 }, 'A new song is created');
+
+    assert
+      .dom('[data-test-rr="song-list-item"]:first-child')
+      .hasText('Hot Potato');
+  });
+
+  test('Create multiple songs', async function (assert) {
+    this.server.create('band', { name: 'Metallica' });
+    await visit('/');
+    await createBand('The Wiggles');
+    await waitFor('[data-test-rr="no-songs-text"]');
+
+    await createSong('Song 1');
+    await waitFor('[data-test-rr="song-list-item"]');
+    await createSong('Song 2');
+    await waitFor('[data-test-rr="song-list-item"]:nth-child(2)');
+    await createSong('Song 3');
+    await waitFor('[data-test-rr="song-list-item"]:nth-child(3)');
+
+    assert
+      .dom('[data-test-rr="song-list-item"]')
+      .exists({ count: 3 }, '3 songs were created');
+
+    assert
+      .dom('[data-test-rr="song-list-item"]:last-child')
+      .hasText('Song 3', 'The last song entered is at the end of the list');
+  });
+
+  test('Rate a song', async function (assert) {
+    this.server.create('band', { name: 'Metallica' });
+    await visit('/');
+    await click('[data-test-rr="band-link"]');
+    await createSong('Song 1');
+    await waitFor('[data-test-rr="song-list-item"]');
+    await click('[data-test-rr="rating-star"]:nth-child(3)');
+    assert
+      .dom('[data-test-rr="rating-star"]:nth-child(3) > [data-prefix="fas"]')
+      .exists('Star 3 is filled');
+    assert
+      .dom('[data-test-rr="rating-star"]:nth-child(4) > [data-prefix="far"]')
+      .exists('Star 4 is outline');
   });
 });
