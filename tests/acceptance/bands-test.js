@@ -103,12 +103,16 @@ module('Acceptance | bands', function (hooks) {
     await click('[data-test-rr="band-link"]');
     await createSong('Song 1');
     await waitFor('[data-test-rr="song-list-item"]');
-    await click('[data-test-rr="rating-star"]:nth-child(3)');
+    await click('[data-test-rr="star-rating-button"]:nth-child(3)');
     assert
-      .dom('[data-test-rr="rating-star"]:nth-child(3) > [data-prefix="fas"]')
+      .dom(
+        '[data-test-rr="star-rating-button"]:nth-child(3) > [data-prefix="fas"]'
+      )
       .exists('Star 3 is filled');
     assert
-      .dom('[data-test-rr="rating-star"]:nth-child(4) > [data-prefix="far"]')
+      .dom(
+        '[data-test-rr="star-rating-button"]:nth-child(4) > [data-prefix="far"]'
+      )
       .exists('Star 4 is outline');
   });
 });
