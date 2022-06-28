@@ -12,6 +12,7 @@ export default class BandsBandSongsController extends Controller {
   // these are tracked properties, if they change there will be a re-render
   @tracked showAddSong = true;
   @tracked title = '';
+  @tracked sortBy = 'title';
 
   // this is a getter, it's return value is available in the template.
   get hasNoTitle() {
@@ -19,12 +20,20 @@ export default class BandsBandSongsController extends Controller {
   }
 
   get sortedSongs() {
+    let sortBy = this.sortBy;
+    let isDecendingSort = false;
+
+    if (sortBy.charAt(0) === '-') {
+      sortBy = this.sortBy.slice(1);
+      isDecendingSort = true;
+    }
+
     return [...this.model.songs].sort((song1, song2) => {
-      if (song1.title < song2.title) {
-        return -1;
+      if (song1[sortBy] < song2[sortBy]) {
+        return isDecendingSort ? 1 : -1;
       }
-      if (song1.title > song2.title) {
-        return 1;
+      if (song1[sortBy] > song2[sortBy]) {
+        return isDecendingSort ? -1 : 1;
       }
       return 0;
     });

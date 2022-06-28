@@ -1,17 +1,60 @@
 {{page-title @model.name ' songs | Rock @ Roll with Octane' replace=true}}
 {{#if this.sortedSongs.length}}
+  <div class='mb-8'>
+    <span class='relative z-0 inline-flex shadow-sm'>
+      <button
+        type='button'
+        class='rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500'
+        data-test-rr='sort-by-title-asc'
+        {{on 'click' (set this 'sortBy' 'title')}}
+      >
+        Title
+        <FaIcon class='ml-2' @icon='angle-up' @prefix='fas' />
+      </button>
+      <button
+        type='button'
+        class='rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500'
+        data-test-rr='sort-by-title-desc'
+        {{on 'click' (set this 'sortBy' '-title')}}
+      >
+        Title
+        <FaIcon class='ml-2' @icon='angle-down' @prefix='fas' />
+      </button>
+      <button
+        type='button'
+        class='rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500'
+        data-test-rr='sort-by-rating-asc'
+        {{on 'click' (set this 'sortBy' 'rating')}}
+      >
+        Rating
+        <FaIcon class='ml-2' @icon='angle-up' @prefix='fas' />
+      </button>
+      <button
+        type='button'
+        class='rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500'
+        data-test-rr='sort-by-rating-desc'
+        {{on 'click' (set this 'sortBy' '-rating')}}
+      >
+        Rating
+        <FaIcon class='ml-2' @icon='angle-down' @prefix='fas' />
+      </button>
+    </span>
+  </div>
   <ul>
     {{#each this.sortedSongs as |song|}}
-      <li class='mb-2' data-test-rr="song-list-item">
+      <li class='mb-2' data-test-rr='song-list-item'>
         {{song.title}}
         <span class='float-right'>
-          <StarRating @rating={{song.rating}} @onUpdate={{fn this.updateRating song}} />
+          <StarRating
+            @rating={{song.rating}}
+            @onUpdate={{fn this.updateRating song}}
+          />
         </span>
       </li>
     {{/each}}
   </ul>
 {{else}}
-  <p class='text-center' data-test-rr="no-songs-text">
+  <p class='text-center' data-test-rr='no-songs-text'>
     The band has no songs yet.
   </p>
 {{/if}}
@@ -20,7 +63,7 @@
     <button
       type='button'
       class='px-4 py-2 rounded bg-purple-600 shadow-md hover:shadow-lg hover:text-white hover:bg-purple-500 focus:outline-none'
-      data-test-rr="new-song-button"
+      data-test-rr='new-song-button'
       {{on 'click' (set this 'showAddSong' false)}}
     >
       Add song
@@ -35,13 +78,14 @@
       class='text-gray-800 bg-white rounded-md py-2 px-4'
       placeholder='Title'
       value={{this.title}}
-      data-test-rr="new-song-title"
+      data-test-rr='new-song-title'
       {{on 'input' this.updateTitle}}
     />
     <button
       type='button'
-      class='ml-4 px-4 py-2 rounded shadow-md hover:shadow-lg hover:text-white {{ if this.hasNoTitle "bg-purple-500" "bg-purple-600"}}'
-      data-test-rr="save-song-button"
+      class='ml-4 px-4 py-2 rounded shadow-md hover:shadow-lg hover:text-white
+        {{if this.hasNoTitle "bg-purple-500" "bg-purple-600"}}'
+      data-test-rr='save-song-button'
       {{on 'click' this.saveSong}}
       disabled={{this.hasNoTitle}}
     >
