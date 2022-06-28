@@ -13,10 +13,18 @@ export default class BandsBandSongsController extends Controller {
   @tracked showAddSong = true;
   @tracked title = '';
   @tracked sortBy = 'title';
+  @tracked searchTerm = '';
 
   // this is a getter, it's return value is available in the template.
   get hasNoTitle() {
     return !this.title;
+  }
+
+  get matchingSongs() {
+    const searchTerm = this.searchTerm.toLowerCase();
+    return this.model.songs.filter((song) => {
+      return song.title.toLowerCase().includes(searchTerm);
+    });
   }
 
   get sortedSongs() {
@@ -28,7 +36,7 @@ export default class BandsBandSongsController extends Controller {
       isDecendingSort = true;
     }
 
-    return [...this.model.songs].sort((song1, song2) => {
+    return this.matchingSongs.sort((song1, song2) => {
       if (song1[sortBy] < song2[sortBy]) {
         return isDecendingSort ? 1 : -1;
       }
@@ -44,6 +52,11 @@ export default class BandsBandSongsController extends Controller {
   async updateRating(song, rating) {
     song.rating = rating;
     this.catalog.update('song', song, { rating });
+  }
+
+  @action
+  updateSearchTerm(event) {
+    this.searchTerm = event.target.value;
   }
 
   @action
