@@ -2,42 +2,38 @@
 {{#if this.sortedSongs.length}}
   <div class='mb-8'>
     <span class='relative z-0 inline-flex shadow-sm'>
-      <button
-        type='button'
+      <LinkTo
         class='rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500'
         data-test-rr='sort-by-title-asc'
-        {{on 'click' (set this 'sortBy' 'title')}}
+        @query={{hash s='title'}}
       >
         Title
         <FaIcon class='ml-2' @icon='angle-up' @prefix='fas' />
-      </button>
-      <button
-        type='button'
+      </LinkTo>
+      <LinkTo
         class='rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500'
         data-test-rr='sort-by-title-desc'
-        {{on 'click' (set this 'sortBy' '-title')}}
+        @query={{hash s='-title'}}
       >
         Title
         <FaIcon class='ml-2' @icon='angle-down' @prefix='fas' />
-      </button>
-      <button
-        type='button'
+      </LinkTo>
+      <LinkTo
         class='rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500'
         data-test-rr='sort-by-rating-asc'
-        {{on 'click' (set this 'sortBy' 'rating')}}
+        @query={{hash s='rating'}}
       >
         Rating
         <FaIcon class='ml-2' @icon='angle-up' @prefix='fas' />
-      </button>
-      <button
-        type='button'
+      </LinkTo>
+      <LinkTo
         class='rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500'
         data-test-rr='sort-by-rating-desc'
-        {{on 'click' (set this 'sortBy' '-rating')}}
+        @query={{hash s='-rating'}}
       >
         Rating
         <FaIcon class='ml-2' @icon='angle-down' @prefix='fas' />
-      </button>
+      </LinkTo>
     </span>
   </div>
   <ul>
