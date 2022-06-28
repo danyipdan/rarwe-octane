@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { capitalize } from '../../../helpers/capitalize';
 
 // Controllers are context for route templates
 
@@ -45,6 +46,11 @@ export default class BandsBandSongsController extends Controller {
       }
       return 0;
     });
+  }
+
+  get newSongPlaceholder() {
+    const bandName = this.model.name;
+    return `New ${capitalize([bandName])} song`;
   }
 
   // @actions are available to be triggered by user action in the template
