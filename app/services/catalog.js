@@ -3,6 +3,7 @@ import Band from '../models/band';
 import Song from '../models/song';
 import { tracked } from 'tracked-built-ins'; // this is nessesary to track properties when the properties are objects (object, array, map, set, etc)
 import { isArray } from '@ember/array';
+import ENV from 'rarwe-octane/config/environment';
 
 // helper function to extract, populate and return a relationships object containing the api end point url for the relationship data
 function extractRelationships(object) {
@@ -23,17 +24,24 @@ export default class CatalogService extends Service {
     this.storage.songs = tracked([]); // same for songs
   }
 
+  get bandsURL() {
+    return `${ENV.apiHost || ''}/bands`;
+  }
+
+  get songsURL() {
+    return `${ENV.apiHost || ''}/songs`;
+  }
   // this is run when the '/bands' route is hit and its return value becomes the return of the model for use in the template
   async fetchAll(type) {
     if (type === 'bands') {
-      const response = await fetch('/bands');
+      const response = await fetch(this.bandsURL);
       const json = await response.json();
       this.loadAll(json);
       return this.bands;
     }
 
     if (type === 'songs') {
-      const response = await fetch('/songs');
+      const response = await fetch(this.songsURL);
       const json = await response.json();
       this.loadAll(json);
       return this.songs;
@@ -95,13 +103,16 @@ export default class CatalogService extends Service {
         relationships,
       },
     };
-    const response = await fetch(type === 'band' ? '/bands' : '/songs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/vnd.api+json',
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      type === 'band' ? this.bandsURL : this.songsURL,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/vnd.api+json',
+        },
+        body: JSON.stringify(payload),
+      }
+    );
     const json = await response.json();
     return this.load(json);
   }
@@ -115,7 +126,10 @@ export default class CatalogService extends Service {
         attributes,
       },
     };
-    const url = type === 'band' ? `/bands/${record.id}` : `/songs/${record.id}`;
+    const url =
+      type === 'band'
+        ? `${this.bandsURL}/${record.id}`
+        : `${this.songsURL}/${record.id}`;
     await fetch(url, {
       method: 'PATCH',
       headers: {
